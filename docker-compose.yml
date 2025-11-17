@@ -1,0 +1,15 @@
+# Source - https://stackoverflow.com/a
+# Posted by Mateusz Przybylek
+# Retrieved 2025-11-16, License - CC BY-SA 4.0
+
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    user: root
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=MyStrongPass123!
+    volumes:
+      - ./data:/var/opt/mssql/data
