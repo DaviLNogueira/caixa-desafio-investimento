@@ -7,8 +7,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.acme.dto.SimulacaoRequestDTO;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.Date;
 import java.util.Locale;
 
@@ -58,6 +62,21 @@ public class SimulacaoEntity {
         ZonedDateTime zdt = ZonedDateTime.parse(this.dataSimulacao.toString(), INPUT_FORMAT);
         return zdt.toInstant().toString();
     }
+
+    public String getDataSimulacaoFormatadaFromBanco() {
+
+        DateTimeFormatter INPUT_FORMAT = new DateTimeFormatterBuilder()
+                .appendPattern("yyyy-MM-dd HH:mm:ss")
+                .appendFraction(ChronoField.MILLI_OF_SECOND, 1, 9, true)
+                .toFormatter();
+
+        LocalDateTime ldt = LocalDateTime.parse(this.dataSimulacao.toString(), INPUT_FORMAT);
+
+        return ldt.atZone(ZoneId.systemDefault())
+                .toInstant()
+                .toString();
+    }
+
 
 
 }
