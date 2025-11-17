@@ -2,6 +2,7 @@ package org.acme.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.acme.dto.ProdutoDiaResponseDto;
 import org.acme.dto.SimilacaoResponseDto;
 import org.acme.dto.SimulacaoRequestDTO;
 import org.acme.dto.SimularInvestimentoResponseDto;
@@ -40,6 +41,10 @@ public class SimulacaoService {
         return simulacaoRepository.findAll().stream().map(
                 SimilacaoResponseDto::new
         ).toList();
+    }
+
+    public List<ProdutoDiaResponseDto> simulacaoProdutoDia(){
+        return simulacaoRepository.agruparProdutoDia();
     }
 
 

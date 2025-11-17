@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import org.acme.dto.ProdutoDiaResponseDto;
 import org.acme.dto.SimilacaoResponseDto;
 import org.acme.dto.SimulacaoRequestDTO;
 import org.acme.dto.SimularInvestimentoResponseDto;
@@ -36,5 +37,13 @@ public class SimulacaoController {
     @Transactional
     public List<SimilacaoResponseDto> todasSimulacoes() {
         return simulacaoService.todasSimulacoes();
+    }
+
+    @GET
+    @Path("/simulacoes/por-produto-dia")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
+    public List<ProdutoDiaResponseDto> simuacaoPorProdutoDia() {
+        return simulacaoService.simulacaoProdutoDia();
     }
 }
