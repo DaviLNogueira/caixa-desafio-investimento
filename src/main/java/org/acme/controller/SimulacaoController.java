@@ -43,7 +43,7 @@ public class SimulacaoController {
     @Path("/simulacoes/por-produto-dia")
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public List<ProdutoDiaResponseDto> simuacaoPorProdutoDia() {
-        return simulacaoService.simulacaoProdutoDia();
+    public List<ProdutoDiaResponseDto> simuacaoPorProdutoDia(@QueryParam("data") String data) {
+        return simulacaoService.simulacaoProdutoDia(data);
     }
 }

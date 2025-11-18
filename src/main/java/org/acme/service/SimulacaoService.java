@@ -11,6 +11,7 @@ import org.acme.entity.SimulacaoEntity;
 import org.acme.repository.ProdutoValidadoRepository;
 import org.acme.repository.SimulacaoRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -43,8 +44,19 @@ public class SimulacaoService {
         ).toList();
     }
 
-    public List<ProdutoDiaResponseDto> simulacaoProdutoDia(){
-        return simulacaoRepository.agruparProdutoDia();
+    public List<ProdutoDiaResponseDto> simulacaoProdutoDia(String data){
+        LocalDate dataBusca;
+        if(data == null){
+            dataBusca = LocalDate.now();
+        }
+        else{
+            try{
+                dataBusca = LocalDate.parse(data);
+            } catch (Exception e) {
+                dataBusca = LocalDate.now();
+            }
+        }
+        return simulacaoRepository.agruparProdutoDia(dataBusca);
     }
 
 

@@ -5,12 +5,13 @@ import jakarta.enterprise.context.ApplicationScoped;
 import org.acme.dto.ProdutoDiaResponseDto;
 import org.acme.entity.SimulacaoEntity;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @ApplicationScoped
 public class SimulacaoRepository  implements PanacheRepository<SimulacaoEntity> {
 
-    public List<ProdutoDiaResponseDto> agruparProdutoDia() {
+    public List<ProdutoDiaResponseDto> agruparProdutoDia(LocalDate data) {
         return getEntityManager().createQuery(
                 "SELECT "+
                         "   s.produto.nome, " +
@@ -18,9 +19,10 @@ public class SimulacaoRepository  implements PanacheRepository<SimulacaoEntity> 
                         "   COUNT(s), " +
                         "   AVG(s.valorFinal)" +
                         "FROM org.acme.entity.SimulacaoEntity s " +
+                        "WHERE  CAST(s.dataSimulacao AS date) = :data " +
                         "GROUP BY s.produto.nome, FUNCTION('FORMAT', s.dataSimulacao, 'yyyy-dd-MM') " +
                         "ORDER BY s.produto.nome",
                 ProdutoDiaResponseDto.class
-        ).getResultList();
+        ).setParameter("data",data).getResultList();
     }
 }
