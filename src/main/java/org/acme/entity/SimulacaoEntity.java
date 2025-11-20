@@ -43,7 +43,7 @@ public class SimulacaoEntity {
     @JoinColumn(name = "id_produto_validado")
     private ProdutoValidadoEntity produto;
 
-    private Integer idCliente;
+    private Long idCliente;
 
     private Double valorInvestido;
 

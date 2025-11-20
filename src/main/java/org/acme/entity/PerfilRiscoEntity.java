@@ -3,13 +3,20 @@ package org.acme.entity;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.acme.exceptions.PerfilNaoIdentificadoException;
 
 @Entity
 @Table(name = "perfil_cliente")
 @Getter
+@NoArgsConstructor
 public class PerfilRiscoEntity {
 
+    public PerfilRiscoEntity(Long clienteId , PerfilEntity perfil , Integer pontuacao){
+        this.clienteId = clienteId;
+        this.perfil = perfil;
+        this.pontuacao = pontuacao;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -35,6 +42,12 @@ public class PerfilRiscoEntity {
             }
         }
         throw new PerfilNaoIdentificadoException();
+    }
+
+    @Transactional
+    public void atualizarPontuacao(Integer pontuacao, PerfilEntity perfil){
+        this.pontuacao = pontuacao;
+        this.perfil = perfil;
     }
 
 }

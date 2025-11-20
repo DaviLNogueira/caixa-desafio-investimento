@@ -11,7 +11,7 @@ public class SimilacaoResponseDto {
 
     public SimilacaoResponseDto(SimulacaoEntity simulacao) {
         this.id = simulacao.getId();
-        this.clinedId = simulacao.getIdCliente();
+        this.clienteId = simulacao.getIdCliente();
         this.produto = simulacao.getProduto().getNome();
         this.valorInvestido = simulacao.getValorInvestido();
         this.valorFinal = simulacao.getValorFinal();
@@ -22,7 +22,7 @@ public class SimilacaoResponseDto {
 
     private Integer id;
 
-    private Integer clinedId;
+    private Long clienteId;
 
     private String produto;
 

@@ -3,7 +3,6 @@ package org.acme.dto;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +16,7 @@ public class SimulacaoRequestDTO {
 
 
     @NotNull(message = "O campo clienteId não deve estar nulo")
-    private Integer clienteId;
+    private Long clienteId;
 
     @NotNull(message = "O campo valor não deve estar nulo")
     @Positive
