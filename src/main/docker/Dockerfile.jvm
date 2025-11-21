@@ -3,7 +3,6 @@
 #
 # Before building the container image run:
 #
-./mvnw clean package -Dquarkus.container-image.build=true -DskipTests
 #
 # Then, build the image with:
 #

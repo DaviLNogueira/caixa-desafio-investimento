@@ -15,7 +15,7 @@ Este projeto tem como objetivo fornecer uma API de investimentos utilizando o fr
 Para executar a aplicação, basta utilizar o comando abaixo:
 
 ```bash
-docker compose up --build -d
+./mvnw clean package -Dquarkus.container-image.build=true -DskipTests  && docker compose up --build -d
 ```
 > **Observação:** Todas as integrações e configurações foram pensadas para execução **em modo de desenvolvimento**.
 > Cerca de 4 minutos podem ser necessários para que todos os serviços estejam totalmente operacionais,
@@ -31,10 +31,12 @@ Para consultar as rotas disponíveis, acesse:
 
 [http://localhost:8082/q/swagger-ui/](http://localhost:8082/q/swagger-ui/)
 
-A documentação via Swagger permite visualizar todos os endpoints expostos, bem como realizar testes diretamente pela interface.
+A documentação via Swagger permite visualizar todos os endpoints expostos, bem como realizar testes diretamente pela interface.Também pode consuntar no arquivo `openapi.yaml` na pasta docs.
 
 > Não é possível a execução dos testes via Swagger, pois a autenticação via Keycloak não foi estabelecida pela configuração do mapeamneto de rede entre os container.
 ## Testes via Insomnia
+
+
 
 O projeto acompanha um arquivo do Insomnia com todos os parâmetros já configurados para facilitar o teste dos endpoints e autenticação via Keycloak.
 
@@ -45,6 +47,7 @@ O projeto acompanha um arquivo do Insomnia com todos os parâmetros já configur
 4. Execute a requisição de "Obter Token" para autenticar, com isso as outras rotas teram intregração automática com o toquen desejada.
 rias, abra uma issue neste repositório!
 
+> Se você encontrar algum problema também pode executar através do script rotas.sh que está na pasta `docs`. Ele utiliza o curl para testar todas as rotas da aplicação automaticamente
 
 ## Observação 
 
