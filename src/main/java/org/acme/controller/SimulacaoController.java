@@ -1,5 +1,6 @@
 package org.acme.controller;
 
+import io.quarkus.security.Authenticated;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Path("/")
 @Consumes(MediaType.APPLICATION_JSON)
+@Authenticated
 public class SimulacaoController {
 
     @Inject

@@ -1,5 +1,6 @@
 package org.acme.controller;
 
+import io.quarkus.security.Authenticated;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -11,6 +12,7 @@ import java.util.List;
 
 
 @Path("/")
+@Authenticated
 @Consumes(MediaType.APPLICATION_JSON)
 public class ProdutoValidadoController {
 

@@ -1,6 +1,7 @@
 package org.acme.controller;
 
 
+import io.quarkus.security.Authenticated;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -11,6 +12,7 @@ import org.acme.service.TelemetriaService;
 
 
 @Path("/telemetria")
+@Authenticated
 @Produces(MediaType.APPLICATION_JSON)
 public class ServicoController {
 

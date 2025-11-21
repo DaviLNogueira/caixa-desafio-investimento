@@ -13,3 +13,33 @@ services:
       - SA_PASSWORD=MyStrongPass123!
     volumes:
       - ./data:/var/opt/mssql/data
+    networks:
+      - keycloak-network
+
+      # Keycloak Authentication Server
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    environment:
+      KC_DB: mssql
+      KC_DB_URL: jdbc:sqlserver://mssql:1433;databaseName=keycloak;encrypt=true;trustServerCertificate=true;
+      KC_DB_USERNAME: sa
+      KC_DB_PASSWORD: MyStrongPass123!
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin_password
+      KC_HOSTNAME_STRICT: false
+      KC_HOSTNAME_STRICT_HTTPS: false
+      KC_HTTP_ENABLED: true
+    command:
+      - start-dev
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mssql
+    networks:
+      - keycloak-network
+
+
+networks:
+  keycloak-network:
+    name: keycloak-network
