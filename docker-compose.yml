@@ -12,8 +12,16 @@ services:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=MyStrongPass123!
     volumes:
-      - ./data:/var/opt/mssql/data
-      - ./init-mssql:/docker-entrypoint-initdb.d
+      - sql_data:/var/opt/mssql
+    command: >
+      /bin/bash -c "
+        /opt/mssql/bin/sqlservr &
+        sleep 20 &&
+        for f in /docker-entrypoint-initdb.d/*.sql; do
+          /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P $${SA_PASSWORD} -i $$f;
+        done
+        wait
+      "
     networks:
       - keycloak-network
   mssql-init:
@@ -54,7 +62,8 @@ services:
     container_name: keycloak
     environment:
       KC_DB: mssql
-      KC_DB_URL: jdbc:sqlserver://mssql:1433;databaseName=keycloak;encrypt=true;trustServerCertificate=true;
+      KC_HOSTNAME_URL: http://keycloak:8080
+      KC_DB_URL: jdbc:sqlserver://mssql:1433;databaseName=model;encrypt=true;trustServerCertificate=true;
       KC_DB_USERNAME: sa
       KC_DB_PASSWORD: MyStrongPass123!
       KEYCLOAK_ADMIN: admin
@@ -65,7 +74,7 @@ services:
       KC_IMPORT: /opt/keycloak/data/import
     volumes:
       - ./keycloak-realm:/opt/keycloak/data/import
-    command: ["start-dev", "--import-realm"]
+    command: [ "start-dev", "--import-realm" ]
     ports:
       - "8080:8080"
     depends_on:
@@ -74,7 +83,32 @@ services:
     networks:
       - keycloak-network
 
+  app:
+    image: 'davi/caixa-investimento/product:1.0.0-SNAPSHOT'
+    build:
+      context: .
+      dockerfile: src/main/docker/Dockerfile.jvm
+    container_name: app
+
+    environment:
+      - QUARKUS_DATASOURCE_URL=jdbc:sqlserver://mssql:1433;databaseName=model;encrypt=false;trustServerCertificate=true
+      - QUARKUS_DATASOURCE_USERNAME=sa
+      - QUARKUS_DATASOURCE_PASSWORD=MyStrongPass123!
+      - QUARKUS_JPA_HIBERNATE_DDL_AUTO=update
+    ports:
+      - '8082:8082'
+    depends_on:
+      mssql-init:
+        condition: service_completed_successfully
+      keycloak:
+        condition: service_started
+    networks:
+      - keycloak-network
+
 
 networks:
   keycloak-network:
     name: keycloak-network
+
+volumes:
+  sql_data:
