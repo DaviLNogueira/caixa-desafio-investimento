@@ -46,6 +46,7 @@ O projeto acompanha um arquivo do Insomnia com todos os parâmetros já configur
 3. Todos os endpoints já estarão configurados, incluindo as chaves de acesso para autenticação.
 4. Execute a requisição de "Obter Token" para autenticar, com isso as outras rotas teram intregração automática com o toquen desejada.
 rias, abra uma issue neste repositório!
+5. Tipo disponiveis para testes: 'CDB', 'TESOURO', 'FII', 'ACAO', 'LCI', 'FUNDO', 'POUPANCA', 'FIXA'
 
 > Se você encontrar algum problema também pode executar através do script rotas.sh que está na pasta `docs`. Ele utiliza o curl para testar todas as rotas da aplicação automaticamente
 
