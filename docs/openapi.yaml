@@ -1,0 +1,320 @@
+---
+openapi: 3.1.0
+components:
+  schemas:
+    InvestimentoDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        tipo:
+          type: string
+        valor:
+          type: number
+          format: double
+        rentabilidade:
+          type: number
+          format: double
+        data:
+          type: string
+    MetricaPorRotaDto:
+      type: object
+      properties:
+        nome:
+          type: string
+        quantidadeChamadas:
+          type: integer
+          format: int64
+        mediaTempoRespostaMs:
+          type: number
+          format: double
+    PerfilRiscoDto:
+      type: object
+      properties:
+        clienteId:
+          type: integer
+          format: int64
+        perfil:
+          type: string
+        pontuacao:
+          type: integer
+          format: int32
+        descricao:
+          type: string
+    ProdutoDiaResponseDto:
+      type: object
+      properties:
+        produto:
+          type: string
+        data:
+          type: string
+        quantidadeSimulacoes:
+          type: integer
+          format: int64
+        mediaValorFinal:
+          type: number
+          format: double
+    ProdutoValidadoDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        nome:
+          type: string
+        tipo:
+          type: string
+        rentabilidade:
+          type: number
+          format: double
+        risco:
+          type: string
+    ResultadoSimulacaoDto:
+      type: object
+      properties:
+        valorFinal:
+          type: number
+          format: double
+        rentabilidadeEfetiva:
+          type: number
+          format: double
+        prazo:
+          type: integer
+          format: int32
+    ServicosDto:
+      type: object
+      properties:
+        servicos:
+          type: array
+          items:
+            $ref: "#/components/schemas/MetricaPorRotaDto"
+    SimilacaoResponseDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        clienteId:
+          type: integer
+          format: int64
+        produto:
+          type: string
+        valorInvestido:
+          type: number
+          format: double
+        valorFinal:
+          type: number
+          format: double
+        prazoMeses:
+          type: integer
+          format: int32
+        dataSimulacao:
+          type: string
+    SimulacaoRequestDTO:
+      type: object
+      required:
+      - clienteId
+      - valor
+      - prazo
+      - tipoProduto
+      properties:
+        clienteId:
+          type: integer
+          format: int64
+        valor:
+          type: number
+          exclusiveMinimum: 0
+          format: double
+        prazo:
+          type: integer
+          exclusiveMinimum: 0
+          format: int32
+        tipoProduto:
+          type: string
+          minLength: 1
+    SimularInvestimentoResponseDto:
+      type: object
+      properties:
+        produtoValidado:
+          $ref: "#/components/schemas/ProdutoValidadoDto"
+        dataSimulacao:
+          type: string
+        resultadoSimulacao:
+          $ref: "#/components/schemas/ResultadoSimulacaoDto"
+  securitySchemes:
+    SecurityScheme:
+      description: Authentication
+      type: openIdConnect
+      openIdConnectUrl: http://localhost:8080/realms/quarkus/.well-known/openid-configuration
+paths:
+  /investimentos/{clienteId}:
+    get:
+      parameters:
+      - name: clienteId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InvestimentoDto"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Find All Investimento By C Liente Id
+      tags:
+      - Investimento Controller
+      security:
+      - SecurityScheme: []
+  /perfil-risco/{clienteId}:
+    get:
+      parameters:
+      - name: clienteId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PerfilRiscoDto"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Find By Clinet Id
+      tags:
+      - Perfil Risco Controller
+      security:
+      - SecurityScheme: []
+  /produtos-recomendados/{perfil}:
+    get:
+      parameters:
+      - name: perfil
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProdutoValidadoDto"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Buscar Invesmento Por Perfil
+      tags:
+      - Produto Validado Controller
+      security:
+      - SecurityScheme: []
+  /simulacoes:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SimilacaoResponseDto"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Todas Simulacoes
+      tags:
+      - Simulacao Controller
+      security:
+      - SecurityScheme: []
+  /simulacoes/por-produto-dia:
+    get:
+      parameters:
+      - name: data
+        in: query
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProdutoDiaResponseDto"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Simuacao Por Produto Dia
+      tags:
+      - Simulacao Controller
+      security:
+      - SecurityScheme: []
+  /simular-investimento:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SimulacaoRequestDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SimularInvestimentoResponseDto"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+        "400":
+          description: Bad Request
+      summary: Simular Investimento
+      tags:
+      - Simulacao Controller
+      security:
+      - SecurityScheme: []
+  /telemetria:
+    get:
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServicosDto"
+        "401":
+          description: Not Authorized
+        "403":
+          description: Not Allowed
+      summary: Coletar Metricas
+      tags:
+      - Servico Controller
+      security:
+      - SecurityScheme: []
+info:
+  title: caixa-investimento API
+  version: 1.0.0-SNAPSHOT

@@ -95,6 +95,7 @@ services:
       - QUARKUS_DATASOURCE_USERNAME=sa
       - QUARKUS_DATASOURCE_PASSWORD=MyStrongPass123!
       - QUARKUS_JPA_HIBERNATE_DDL_AUTO=update
+      - QUARKUS_SMALLRYE_OPENAPI_OAUTH2_IMPLICIT_TOKEN_URL=http://localhost:8080/realms/quarkus/protocol/openid-connect/token
     ports:
       - '8082:8082'
     depends_on:
