@@ -27,11 +27,12 @@ A aplicação faz integração direta com o Keycloak para autenticação dos usu
 
 ## Rotas
 
-Para consultar as rotas disponíveis, acesse:
+Para consultar as rotas disponíveis, acesse
 
 [http://localhost:8082/q/swagger-ui/](http://localhost:8082/q/swagger-ui/)
 
 A documentação via Swagger permite visualizar todos os endpoints expostos, bem como realizar testes diretamente pela interface.Também pode consuntar no arquivo `openapi.yaml` na pasta docs.
+A aplicação está a executar em `http://localhost:8082`
 
 > Não é possível a execução dos testes via Swagger, pois a autenticação via Keycloak não foi estabelecida pela configuração do mapeamneto de rede entre os container.
 ## Testes via Insomnia
