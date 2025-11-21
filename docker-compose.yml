@@ -13,6 +13,38 @@ services:
       - SA_PASSWORD=MyStrongPass123!
     volumes:
       - ./data:/var/opt/mssql/data
+      - ./init-mssql:/docker-entrypoint-initdb.d
+    networks:
+      - keycloak-network
+  mssql-init:
+    image: mcr.microsoft.com/mssql-tools
+    depends_on:
+      - mssql
+    volumes:
+      - ./init-mssql:/init
+    entrypoint: >
+      /bin/bash -c "
+      sleep 20;
+      for f in /init/*.sql; do
+        if [ -f \"$f\" ]; then
+                 echo 'Executando script:' $f;
+                 /opt/mssql-tools/bin/sqlcmd -S mssql -U sa -P MyStrongPass123! -i \"$f\";
+        fi
+      done
+      "
+    healthcheck:
+      test: [
+        "CMD",
+        "/opt/mssql-tools/bin/sqlcmd",
+        "-S", "localhost",
+        "-U", "sa",
+        "-P", "MyStrongPass123!",
+        "-Q", "SELECT 1"
+      ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
     networks:
       - keycloak-network
 
@@ -35,7 +67,8 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - mssql
+      mssql-init:
+        condition: service_completed_successfully
     networks:
       - keycloak-network
 
