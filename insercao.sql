@@ -1,4 +1,8 @@
-INSERT INTO produto_validado (id, nome, tipo, rentabilidade, risco)
+use model;
+
+go
+
+INSERT INTO dbo.produto_validado (id, nome, tipo, rentabilidade, risco)
 VALUES
     (1, 'CDB Banco', 'CDB', 12.5, 'ALTO'),
     (2, 'Tesouro Selic 2026', 'TESOURO', 10.2, 'BAIXO'),

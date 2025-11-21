@@ -66,3 +66,6 @@ Para autenticação via API, utilize:
 
 Na pasta docs, você encontrará um arquivos  com informações detalhadas sobre decisões, modelo de banco de daos, apis adotadas durante o desenvolvimento da aplicação.
 Além que no github a um rastreio de commits que detalham o desenvolvimento passo a passo com as issues.
+
+
+>Não foi possível a realização de inserção de dados dos produtos associados.Por esse motivo é disponibilizado o script de inserção se necessário na raiz do projeto.insercao.sql.
