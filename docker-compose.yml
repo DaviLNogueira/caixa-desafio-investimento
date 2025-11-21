@@ -62,8 +62,10 @@ services:
       KC_HOSTNAME_STRICT: false
       KC_HOSTNAME_STRICT_HTTPS: false
       KC_HTTP_ENABLED: true
-    command:
-      - start-dev
+      KC_IMPORT: /opt/keycloak/data/import
+    volumes:
+      - ./keycloak-realm:/opt/keycloak/data/import
+    command: ["start-dev", "--import-realm"]
     ports:
       - "8080:8080"
     depends_on:
